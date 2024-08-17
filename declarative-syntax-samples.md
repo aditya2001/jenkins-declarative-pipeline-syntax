@@ -19,6 +19,7 @@ pipeline {
 
 
 ## Triggers
+The triggers directive defines the automated ways in which the Pipeline should be re-triggered.
 
 ### triggers sample
 
@@ -39,7 +40,8 @@ pipeline {
 ```
 
 ## Tools
-
+A section defining tools to auto-install and put on the PATH. Inside pipeline block or stage block.
+The tool name must be pre-configured in Jenkins under Manage Jenkins → Global Tool Configuration.
 ### Loading maven using tools
 
 ```groovy
@@ -62,8 +64,13 @@ pipeline {
 
 
 ## When
+The when directive allows the Pipeline to determine whether the stage should be executed depending on the given condition. 
+Allowed inside stage directive.
 
-### When block with parameters
+### When block with expression
+
+The parameters directive provides a list of parameters which a user should provide when triggering the Pipeline. The values for these user-specified parameters are made available to Pipeline steps via the params object
+Allowed only inside pipeline block.
 
 ```groovy
 pipeline {
@@ -79,7 +86,7 @@ pipeline {
                  }
              }
               steps {
-                 echo "Working on dev branch"
+                  echo "Hello ${params.ENVIRONMENT}"
               }
          }
      }
@@ -87,6 +94,8 @@ pipeline {
 ```
 
 ### when block with environment variables
+
+The environment directive specifies a sequence of key-value pairs which will be defined as environment variables for the all steps, or stage-specific steps, depending on where the environment directive is located within the Pipeline.
 
 ```groovy
 pipeline {
@@ -96,6 +105,9 @@ pipeline {
     }
     stages {
         stage('Welcome Step') {
+            environment {
+                ENV = 'uat'
+            }
             when {
                 environment name: 'ENV', value: 'uat'
              }
@@ -104,6 +116,24 @@ pipeline {
             }
         }
     }
+}
+```
+
+### When block with branch
+
+```groovy
+pipeline {
+     agent any
+     stages {
+         stage('build') {
+              when {
+                  branch 'dev'
+              }
+              steps {
+                 echo "Working on dev branch"
+              }
+         }
+     }
 }
 ```
 
@@ -158,6 +188,8 @@ pipeline {
 ```
 
 ## Triggers
+
+The triggers directive defines the automated ways in which the Pipeline should be re-triggered. For Pipelines which are integrated with a source such as GitHub or Bitbucket, triggers may not be necessary as webhooks-based integration will likely already be present. Currently the only two available triggers are cron and pollSCM.
 
 ### triggers sample
 
