@@ -1,5 +1,8 @@
 # Jenkins Declarative Pipeline
 
+Traditionally, Jenkins jobs were created using Jenkins UI called FreeStyle jobs. In Jenkins 2.0, Jenkins introduced a new way to create jobs using the technique called pipeline as code. 
+In pipeline as code technique, jobs are created using a script file that contains the steps to be executed by the job like code checkout, mvn test, reports generation commands. In Jenkins, that scripted file is called Jenkinsfile.
+
 ## First Declarative Pipeline
 
 ```groovy
